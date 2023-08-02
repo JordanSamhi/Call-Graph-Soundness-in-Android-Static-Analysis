@@ -20,7 +20,6 @@ Below is a brief explanation of each directory of our artifacts:
 - **static_analysis/**: Contains everything needed to reproduce our static analyses experiments.
 - **instrumentation/**: Contains the necessary files to instrument the apps for the dynamic analysis.
 - **SLR/**: Contains the excel files with the papers collected during our Systematic Literature Review (SLR).
-- **results/**: Contains the results of our static analysis.
 
 Please ensure that all the necessary files and resources are present in the respective directories before running any experiments.
 
