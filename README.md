@@ -12,7 +12,7 @@ This repository hosts the dataset and the artifacts used in our study.
 
 ## Artifact Folder Structure
 
-This repository contains the necessary artifacts for our study. Below is a brief explanation of each directory:
+Below is a brief explanation of each directory of our artifacts:
 
 - **dataset/**: Contains the dataset used in our study.
 - **dynamic_analysis/**: Contains everything needed to reproduce our dynamic analysis experiments.
@@ -22,8 +22,6 @@ This repository contains the necessary artifacts for our study. Below is a brief
 - **results/**: Contains the results of our static analysis.
 
 Please ensure that all the necessary files and resources are present in the respective directories before running any experiments.
-
-Should you encounter any issues, feel free to open an issue on this repository and we'll assist you as soon as possible.
 
 ## Installing the tool for static analysis
 
