@@ -1,9 +1,10 @@
 package com.jordansamhi.experiments.callgraphsoundness;
 
 import com.jordansamhi.androspecter.SootUtils;
+import com.jordansamhi.androspecter.commonlineoptions.CommandLineOption;
+import com.jordansamhi.androspecter.commonlineoptions.CommandLineOptions;
+import com.jordansamhi.androspecter.instrumentation.Instrumenter;
 import com.jordansamhi.androspecter.printers.Writer;
-import com.jordansamhi.experiments.callgraphsoundness.utils.CommandLineOptionsInstrumenterApk;
-import com.jordansamhi.experiments.callgraphsoundness.utils.ResultsAccumulator;
 import org.apache.commons.io.FilenameUtils;
 import soot.PackManager;
 
@@ -24,31 +25,34 @@ import java.util.Date;
  * Any exceptions occurring during the process are caught and logged.
  *
  * @author Jordan Samhi
- * @see CommandLineOptionsInstrumenterApk
  * @see Writer
- * @see ResultsAccumulator
  * @see SootUtils
  * @see PackManager
  */
 public class InstrumenterApk {
     public static void main(String[] args) {
-        CommandLineOptionsInstrumenterApk.v().parseArgs(args);
+        CommandLineOptions options = CommandLineOptions.v();
+        options.setAppName("AndroLibZoo FlowDroid Experiment");
+        options.addOption(new CommandLineOption("apk", "a", "The APK to instrument", true, true));
+        options.addOption(new CommandLineOption("platforms", "p", "Platform file", true, true));
+        options.addOption(new CommandLineOption("output", "o", "Output folder", true, true));
+        options.parseArgs(args);
+
         Writer.v().pinfo(String.format("Instrumentation started on %s\n", new Date()));
-        String output = CommandLineOptionsInstrumenterApk.v().getOutput();
-        String platformsPath = CommandLineOptionsInstrumenterApk.v().getPlatforms();
-        String apkPath = CommandLineOptionsInstrumenterApk.v().getApk();
+        String output = CommandLineOptions.v().getOptionValue("output");
+        String platformsPath = CommandLineOptions.v().getOptionValue("platforms");
+        String apkPath = CommandLineOptions.v().getOptionValue("apk");
 
         try {
             String appName = FilenameUtils.getBaseName(apkPath);
             Writer.v().pinfo(String.format("Processing: %s", appName));
-            ResultsAccumulator.v().setAppName(appName);
 
             Writer.v().pinfo("Loading Soot...");
             SootUtils su = new SootUtils();
             su.setupSootWithOutput(platformsPath, apkPath, output, false);
             Writer.v().psuccess("Soot loaded.");
 
-            PackManager.v().getPack("jtp").add(com.jordansamhi.androspecter.instrumentation.Instrumenter.v().addLogToAllMethods("MY_LOGGER", "jtp.methodsLogger"));
+            PackManager.v().getPack("jtp").add(Instrumenter.v().addLogToAllMethods("MY_LOGGER", "jtp.methodsLogger"));
 
             Writer.v().pinfo("Instrumentation in progress..");
             PackManager.v().runPacks();

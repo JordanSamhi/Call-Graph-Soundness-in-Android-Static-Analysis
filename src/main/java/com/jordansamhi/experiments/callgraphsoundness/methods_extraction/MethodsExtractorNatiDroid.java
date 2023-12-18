@@ -1,8 +1,8 @@
 package com.jordansamhi.experiments.callgraphsoundness.methods_extraction;
 
 import com.jordansamhi.androspecter.AndroZooUtils;
+import com.jordansamhi.androspecter.commonlineoptions.CommandLineOptions;
 import com.jordansamhi.experiments.callgraphsoundness.from_other_tools.natidroid.JavaLink;
-import com.jordansamhi.experiments.callgraphsoundness.utils.CommandLineOptionsMethodsExtractor;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,14 +13,14 @@ public class MethodsExtractorNatiDroid extends MethodsExtractorBase {
     private AndroZooUtils au;
 
     public MethodsExtractorNatiDroid() {
-        String apikey = CommandLineOptionsMethodsExtractor.v().getAndroZooApiKey();
+        String apikey = CommandLineOptions.v().getOptionValue("apikey");
         this.au = new AndroZooUtils(apikey);
     }
 
     @Override
     protected void initEnv(String apkPath) {
         soot.G.reset();
-        String platformsPath = CommandLineOptionsMethodsExtractor.v().getPlatforms();
+        String platformsPath = CommandLineOptions.v().getOptionValue("platforms");
         String mainClassStrLast = "SensorNotificationService";
         String mainClassStr = "com.android.server." + mainClassStrLast;
         ArrayList<String> starts_call = new ArrayList<String>();

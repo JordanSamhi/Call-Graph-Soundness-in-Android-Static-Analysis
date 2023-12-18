@@ -1,7 +1,7 @@
 package com.jordansamhi.experiments.callgraphsoundness.methods_extraction;
 
 import com.jordansamhi.androspecter.AndroZooUtils;
-import com.jordansamhi.experiments.callgraphsoundness.utils.CommandLineOptionsMethodsExtractor;
+import com.jordansamhi.androspecter.commonlineoptions.CommandLineOptions;
 import com.jordansamhi.experiments.callgraphsoundness.from_other_tools.sootfx.SootConnector;
 import soot.PackManager;
 
@@ -28,7 +28,7 @@ public class MethodsExtractorSootFX extends MethodsExtractorBase {
     private String apkPath;
 
     public MethodsExtractorSootFX() {
-        String apikey = CommandLineOptionsMethodsExtractor.v().getAndroZooApiKey();
+        String apikey = CommandLineOptions.v().getOptionValue("apikey");
         this.au = new AndroZooUtils(apikey);
     }
 
@@ -39,7 +39,7 @@ public class MethodsExtractorSootFX extends MethodsExtractorBase {
 
     @Override
     protected void buildCallGraph(String algo, String appName) {
-        String platformsPath = CommandLineOptionsMethodsExtractor.v().getPlatforms();
+        String platformsPath = CommandLineOptions.v().getOptionValue("platforms");
         SootConnector.setupSoot(null, this.apkPath, false, platformsPath);
         try {
             PackManager.v().runPacks();

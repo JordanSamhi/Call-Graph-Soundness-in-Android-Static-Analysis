@@ -1,8 +1,8 @@
 package com.jordansamhi.experiments.callgraphsoundness.methods_extraction;
 
 import com.jordansamhi.androspecter.AndroZooUtils;
+import com.jordansamhi.androspecter.commonlineoptions.CommandLineOptions;
 import com.jordansamhi.experiments.callgraphsoundness.from_other_tools.gator.Gator;
-import com.jordansamhi.experiments.callgraphsoundness.utils.CommandLineOptionsMethodsExtractor;
 
 import java.util.Collections;
 import java.util.List;
@@ -13,13 +13,13 @@ public class MethodsExtractorGator extends MethodsExtractorBase {
     private String apkPath;
 
     public MethodsExtractorGator() {
-        String apikey = CommandLineOptionsMethodsExtractor.v().getAndroZooApiKey();
+        String apikey = CommandLineOptions.v().getOptionValue("apikey");
         this.au = new AndroZooUtils(apikey);
     }
 
     @Override
     protected void initEnv(String apkPath) {
-        String platformsPath = CommandLineOptionsMethodsExtractor.v().getPlatforms();
+        String platformsPath = CommandLineOptions.v().getOptionValue("platforms");
         Gator.setupAndInvokeSoot(platformsPath, this.apkPath);
     }
 

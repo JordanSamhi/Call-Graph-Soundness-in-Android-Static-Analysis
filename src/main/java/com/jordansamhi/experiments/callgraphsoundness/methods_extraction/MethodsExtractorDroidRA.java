@@ -1,7 +1,7 @@
 package com.jordansamhi.experiments.callgraphsoundness.methods_extraction;
 
 import com.jordansamhi.androspecter.FlowdroidUtils;
-import com.jordansamhi.experiments.callgraphsoundness.utils.CommandLineOptionsMethodsExtractor;
+import com.jordansamhi.androspecter.commonlineoptions.CommandLineOptions;
 
 import java.util.Arrays;
 import java.util.List;
@@ -30,8 +30,8 @@ public class MethodsExtractorDroidRA extends MethodsExtractorBase {
 
     @Override
     protected void buildCallGraph(String algo, String appName) {
-        String platformsPath = CommandLineOptionsMethodsExtractor.v().getPlatforms();
-        fu.initializeFlowdroid(platformsPath, null, algo, false);
+        String platformsPath = CommandLineOptions.v().getOptionValue("platforms");
+        fu.initializeFlowdroid(platformsPath, null, algo);
     }
 
     @Override

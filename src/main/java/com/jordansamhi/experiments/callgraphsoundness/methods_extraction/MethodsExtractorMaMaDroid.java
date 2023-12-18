@@ -1,7 +1,7 @@
 package com.jordansamhi.experiments.callgraphsoundness.methods_extraction;
 
 import com.jordansamhi.androspecter.AndroZooUtils;
-import com.jordansamhi.experiments.callgraphsoundness.utils.CommandLineOptionsMethodsExtractor;
+import com.jordansamhi.androspecter.commonlineoptions.CommandLineOptions;
 import soot.PackManager;
 import soot.Scene;
 import soot.jimple.infoflow.InfoflowConfiguration;
@@ -35,7 +35,7 @@ public class MethodsExtractorMaMaDroid extends MethodsExtractorBase {
     private String apkPath;
 
     public MethodsExtractorMaMaDroid() {
-        String apikey = CommandLineOptionsMethodsExtractor.v().getAndroZooApiKey();
+        String apikey = CommandLineOptions.v().getOptionValue("apikey");
         this.au = new AndroZooUtils(apikey);
     }
 
@@ -48,7 +48,7 @@ public class MethodsExtractorMaMaDroid extends MethodsExtractorBase {
     protected void buildCallGraph(String algo, String appName) {
         List<String> toInclude = Arrays.asList("java.", "android.", "org.", "com.", "javax.");
         List<String> toExclude = Collections.singletonList("soot.");
-        String platformsPath = CommandLineOptionsMethodsExtractor.v().getPlatforms();
+        String platformsPath = CommandLineOptions.v().getOptionValue("platforms");
         InfoflowAndroidConfiguration ifac = new InfoflowAndroidConfiguration();
         URL resource = MethodsExtractorMaMaDroid.class.getClassLoader().getResource("SourcesAndSinks.txt");
         String sourcesAndSinksFilePath = Paths.get(resource.getPath()).toString();

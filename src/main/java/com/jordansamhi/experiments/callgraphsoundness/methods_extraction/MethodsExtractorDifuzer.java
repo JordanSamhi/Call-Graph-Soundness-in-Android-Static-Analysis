@@ -1,7 +1,7 @@
 package com.jordansamhi.experiments.callgraphsoundness.methods_extraction;
 
 import com.jordansamhi.androspecter.AndroZooUtils;
-import com.jordansamhi.experiments.callgraphsoundness.utils.CommandLineOptionsMethodsExtractor;
+import com.jordansamhi.androspecter.commonlineoptions.CommandLineOptions;
 import soot.jimple.infoflow.InfoflowConfiguration;
 import soot.jimple.infoflow.android.InfoflowAndroidConfiguration;
 import soot.jimple.infoflow.android.SetupApplication;
@@ -15,7 +15,7 @@ public class MethodsExtractorDifuzer extends MethodsExtractorBase {
     private String apkPath;
 
     public MethodsExtractorDifuzer() {
-        String apikey = CommandLineOptionsMethodsExtractor.v().getAndroZooApiKey();
+        String apikey = CommandLineOptions.v().getOptionValue("apikey");
         this.au = new AndroZooUtils(apikey);
     }
 
@@ -26,7 +26,7 @@ public class MethodsExtractorDifuzer extends MethodsExtractorBase {
 
     @Override
     protected void buildCallGraph(String algo, String appName) {
-        String platformsPath = CommandLineOptionsMethodsExtractor.v().getPlatforms();
+        String platformsPath = CommandLineOptions.v().getOptionValue("platforms");
         InfoflowAndroidConfiguration ifac = new InfoflowAndroidConfiguration();
         ifac.setIgnoreFlowsInSystemPackages(false);
         ifac.getAnalysisFileConfig().setAndroidPlatformDir(platformsPath);

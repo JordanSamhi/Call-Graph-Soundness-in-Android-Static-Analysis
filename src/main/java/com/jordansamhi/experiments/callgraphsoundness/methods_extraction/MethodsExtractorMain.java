@@ -1,6 +1,7 @@
 package com.jordansamhi.experiments.callgraphsoundness.methods_extraction;
 
-import com.jordansamhi.experiments.callgraphsoundness.utils.CommandLineOptionsMethodsExtractor;
+import com.jordansamhi.androspecter.commonlineoptions.CommandLineOption;
+import com.jordansamhi.androspecter.commonlineoptions.CommandLineOptions;
 
 /**
  * The `MethodsExtractorMain` class provides an entry point for the APK methods extraction process.
@@ -13,7 +14,6 @@ import com.jordansamhi.experiments.callgraphsoundness.utils.CommandLineOptionsMe
  * If the specified tool is not recognized, an `IllegalArgumentException` is thrown.
  *
  * @author Jordan Samhi
- * @see CommandLineOptionsMethodsExtractor
  * @see MethodsExtractorBase
  * @see MethodsExtractorFlowdroid
  * @see MethodsExtractorICCTA
@@ -24,8 +24,17 @@ import com.jordansamhi.experiments.callgraphsoundness.utils.CommandLineOptionsMe
  */
 public class MethodsExtractorMain {
     public static void main(String[] args) {
-        CommandLineOptionsMethodsExtractor.v().parseArgs(args);
-        String tool = CommandLineOptionsMethodsExtractor.v().getTool();
+        CommandLineOptions options = CommandLineOptions.v();
+        options.setAppName("AndroLibZoo FlowDroid Experiment");
+        options.addOption(new CommandLineOption("apikey", "a", "AndroZoo API key", true, true));
+        options.addOption(new CommandLineOption("platforms", "p", "Platform file", true, true));
+        options.addOption(new CommandLineOption("redis-srv", "s", "Sets the redis server address", true, true));
+        options.addOption(new CommandLineOption("redis-port", "n", "Sets the redis port to connect to", true, true));
+        options.addOption(new CommandLineOption("redis-pwd", "w", "Sets the redis password", true, true));
+        options.addOption(new CommandLineOption("redis-root", "o", "Sets the redis root list/set", true, true));
+        options.addOption(new CommandLineOption("tool", "t", "The tool to use", true, true));
+        options.parseArgs(args);
+        String tool = CommandLineOptions.v().getOptionValue("tool");
 
         MethodsExtractorBase meb;
 
@@ -65,9 +74,6 @@ public class MethodsExtractorMain {
                 break;
             case "difuzer":
                 meb = new MethodsExtractorDifuzer();
-                break;
-            case "jicer":
-                meb = new com.jordansamhi.experiments.callgraphsoundness.methods_extraction.MethodsExtractorJicer();
                 break;
             default:
                 throw new IllegalArgumentException("Invalid tool: " + tool);

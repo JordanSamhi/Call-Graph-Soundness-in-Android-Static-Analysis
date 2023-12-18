@@ -1,10 +1,9 @@
 package com.jordansamhi.experiments.callgraphsoundness.methods_extraction;
 
+import com.jordansamhi.androspecter.commonlineoptions.CommandLineOptions;
 import com.jordansamhi.androspecter.network.RedisManager;
 import com.jordansamhi.androspecter.printers.Writer;
-import com.jordansamhi.experiments.callgraphsoundness.utils.CommandLineOptionsMethodsExtractor;
 import com.jordansamhi.experiments.callgraphsoundness.utils.DataCollector;
-import com.jordansamhi.experiments.callgraphsoundness.utils.ResultsAccumulator;
 import soot.Scene;
 import soot.jimple.toolkits.callgraph.CallGraph;
 
@@ -52,15 +51,12 @@ public abstract class MethodsExtractorBase {
      * @throws TimeoutException     if the call graph building process exceeds the 10-minute limit.
      */
     public void run() {
-        String redisSrv = CommandLineOptionsMethodsExtractor.v().getRedisServer();
-        String redisPwd = CommandLineOptionsMethodsExtractor.v().getRedisPwd();
-        String redisPort = CommandLineOptionsMethodsExtractor.v().getRedisPort();
-        String redisRoot = CommandLineOptionsMethodsExtractor.v().getRedisRoot();
+        String redisSrv = CommandLineOptions.v().getOptionValue("redis-srv");
+        String redisPwd = CommandLineOptions.v().getOptionValue("redis-pwd");
+        String redisPort = CommandLineOptions.v().getOptionValue("redis-port");
+        String redisRoot = CommandLineOptions.v().getOptionValue("redis-root");
         String redisSpop = String.format("%s:pop", redisRoot);
         String redisSuccess = String.format("%s:success", redisRoot);
-
-        String timeout_str = CommandLineOptionsMethodsExtractor.v().getTimeout();
-        int timeout = Integer.parseInt(timeout_str);
 
         RedisManager rm = new RedisManager(redisSrv, redisPort, redisPwd);
 
@@ -77,7 +73,6 @@ public abstract class MethodsExtractorBase {
                 }
                 Writer.v().psuccess(String.format("SHA well received: %s", pop));
                 String apkPath = this.getApkPath(pop);
-                ResultsAccumulator.v().setAppName(pop);
 
                 Writer.v().pinfo("Initializing Environment");
                 this.initEnv(apkPath);
@@ -100,7 +95,7 @@ public abstract class MethodsExtractorBase {
                         }
                     });
                     try {
-                        String result = future.get(timeout, TimeUnit.MINUTES);
+                        String result = future.get(60, TimeUnit.MINUTES);
                         dc.collect(result, pop, algo, cg[0]);
                     } catch (TimeoutException e) {
                         Writer.v().perror("Timeout reached");

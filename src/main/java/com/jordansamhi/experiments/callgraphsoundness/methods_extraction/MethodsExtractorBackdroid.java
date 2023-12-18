@@ -1,7 +1,7 @@
 package com.jordansamhi.experiments.callgraphsoundness.methods_extraction;
 
 import com.jordansamhi.androspecter.AndroZooUtils;
-import com.jordansamhi.experiments.callgraphsoundness.utils.CommandLineOptionsMethodsExtractor;
+import com.jordansamhi.androspecter.commonlineoptions.CommandLineOptions;
 import soot.Scene;
 import soot.jimple.infoflow.InfoflowConfiguration;
 import soot.jimple.infoflow.android.SetupApplication;
@@ -16,7 +16,7 @@ public class MethodsExtractorBackdroid extends MethodsExtractorBase {
     private String apkPath;
 
     public MethodsExtractorBackdroid() {
-        String apikey = CommandLineOptionsMethodsExtractor.v().getAndroZooApiKey();
+        String apikey = CommandLineOptions.v().getOptionValue("apikey");
         this.au = new AndroZooUtils(apikey);
     }
 
@@ -27,7 +27,7 @@ public class MethodsExtractorBackdroid extends MethodsExtractorBase {
 
     @Override
     protected void buildCallGraph(String algo, String appName) {
-        String platformsPath = CommandLineOptionsMethodsExtractor.v().getPlatforms();
+        String platformsPath = CommandLineOptions.v().getOptionValue("platforms");
         SetupApplication app = new SetupApplication(platformsPath, apkPath);
         app.getConfig().setCallgraphAlgorithm(InfoflowConfiguration.CallgraphAlgorithm.SPARK);
         Options.v().set_src_prec(Options.src_prec_apk);

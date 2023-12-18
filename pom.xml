@@ -3,9 +3,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.jordansamhi</groupId>
-    <artifactId>Experiments</artifactId>
+    <artifactId>experiments-callgraphsoundness</artifactId>
     <version>1.0</version>
-    <name>Experiments</name>
+    <name>Experiments-CallGraphSoundness</name>
 
     <build>
         <plugins>
@@ -21,29 +21,6 @@
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
-                </configuration>
-            </plugin>
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                    <archive>
-                        <manifest>
-                            <mainClass>
-                                com.jordansamhi.experiments.callgraphsoundness.methods_extraction.MethodsExtractorMain
-                            </mainClass>
-                        </manifest>
-                    </archive>
                 </configuration>
             </plugin>
             <plugin>
@@ -100,13 +77,8 @@
         </dependency>
         <dependency>
             <groupId>com.jordansamhi</groupId>
-            <artifactId>AndroSpecter</artifactId>
-            <version>1.0.4</version>
-        </dependency>
-        <dependency>
-            <groupId>de.foellix</groupId>
-            <artifactId>AQL-System</artifactId>
-            <version>2.0.0</version>
+            <artifactId>androspecter</artifactId>
+            <version>1.0.8</version>
         </dependency>
     </dependencies>
 </project>

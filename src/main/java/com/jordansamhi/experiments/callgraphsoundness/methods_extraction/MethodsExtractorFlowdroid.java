@@ -2,7 +2,7 @@ package com.jordansamhi.experiments.callgraphsoundness.methods_extraction;
 
 import com.jordansamhi.androspecter.AndroZooUtils;
 import com.jordansamhi.androspecter.FlowdroidUtils;
-import com.jordansamhi.experiments.callgraphsoundness.utils.CommandLineOptionsMethodsExtractor;
+import com.jordansamhi.androspecter.commonlineoptions.CommandLineOptions;
 
 import java.util.Arrays;
 import java.util.List;
@@ -30,7 +30,7 @@ public class MethodsExtractorFlowdroid extends MethodsExtractorBase {
     private AndroZooUtils au;
 
     public MethodsExtractorFlowdroid() {
-        String apikey = CommandLineOptionsMethodsExtractor.v().getAndroZooApiKey();
+        String apikey = CommandLineOptions.v().getOptionValue("apikey");
         this.au = new AndroZooUtils(apikey);
     }
 
@@ -41,8 +41,8 @@ public class MethodsExtractorFlowdroid extends MethodsExtractorBase {
 
     @Override
     protected void buildCallGraph(String algo, String appName) {
-        String platformsPath = CommandLineOptionsMethodsExtractor.v().getPlatforms();
-        this.fu.initializeFlowdroid(platformsPath, null, algo, false);
+        String platformsPath = CommandLineOptions.v().getOptionValue("platforms");
+        this.fu.initializeFlowdroid(platformsPath, null, algo);
     }
 
     @Override

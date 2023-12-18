@@ -1,7 +1,7 @@
 package com.jordansamhi.experiments.callgraphsoundness.methods_extraction;
 
 import com.jordansamhi.androspecter.AndroZooUtils;
-import com.jordansamhi.experiments.callgraphsoundness.utils.CommandLineOptionsMethodsExtractor;
+import com.jordansamhi.androspecter.commonlineoptions.CommandLineOptions;
 import soot.PackManager;
 import soot.Scene;
 import soot.options.Options;
@@ -14,7 +14,7 @@ public class MethodsExtractorACID extends MethodsExtractorBase {
     private AndroZooUtils au;
 
     public MethodsExtractorACID() {
-        String apikey = CommandLineOptionsMethodsExtractor.v().getAndroZooApiKey();
+        String apikey = CommandLineOptions.v().getOptionValue("apikey");
         this.au = new AndroZooUtils(apikey);
     }
 
@@ -31,7 +31,7 @@ public class MethodsExtractorACID extends MethodsExtractorBase {
 
     @Override
     protected void buildCallGraph(String algo, String appName) {
-        String platformsPath = CommandLineOptionsMethodsExtractor.v().getPlatforms();
+        String platformsPath = CommandLineOptions.v().getOptionValue("platforms");
         Options.v().set_android_jars(platformsPath);
         Scene.v().loadNecessaryClasses();
         PackManager.v().runPacks();

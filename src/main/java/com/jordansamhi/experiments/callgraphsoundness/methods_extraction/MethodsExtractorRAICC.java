@@ -1,7 +1,7 @@
 package com.jordansamhi.experiments.callgraphsoundness.methods_extraction;
 
 import com.jordansamhi.androspecter.FlowdroidUtils;
-import com.jordansamhi.experiments.callgraphsoundness.utils.CommandLineOptionsMethodsExtractor;
+import com.jordansamhi.androspecter.commonlineoptions.CommandLineOptions;
 import soot.jimple.infoflow.android.SetupApplication;
 
 import java.io.File;
@@ -34,8 +34,8 @@ public class MethodsExtractorRAICC extends MethodsExtractorBase {
 
     @Override
     protected void buildCallGraph(String algo, String appName) {
-        String platformsPath = CommandLineOptionsMethodsExtractor.v().getPlatforms();
-        SetupApplication sa = fu.initializeFlowdroid(platformsPath, null, algo, false);
+        String platformsPath = CommandLineOptions.v().getOptionValue("platforms");
+        SetupApplication sa = fu.initializeFlowdroid(platformsPath, null, algo);
 
         File model = new File(String.format("./icc_models/%s.txt", appName));
         if (model.exists()) {

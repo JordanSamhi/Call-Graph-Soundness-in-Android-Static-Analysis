@@ -2,10 +2,11 @@ package com.jordansamhi.experiments.callgraphsoundness;
 
 import com.jordansamhi.androspecter.AndroZooUtils;
 import com.jordansamhi.androspecter.SootUtils;
+import com.jordansamhi.androspecter.commonlineoptions.CommandLineOption;
+import com.jordansamhi.androspecter.commonlineoptions.CommandLineOptions;
+import com.jordansamhi.androspecter.instrumentation.Instrumenter;
 import com.jordansamhi.androspecter.network.RedisManager;
 import com.jordansamhi.androspecter.printers.Writer;
-import com.jordansamhi.experiments.callgraphsoundness.utils.CommandLineOptionsInstrumenterRedis;
-import com.jordansamhi.experiments.callgraphsoundness.utils.ResultsAccumulator;
 import org.apache.commons.io.FilenameUtils;
 import soot.PackManager;
 
@@ -31,7 +32,6 @@ import java.util.Date;
  * Any exceptions occurring during the process are caught and logged.
  *
  * @author Jordan Samhi
- * @see CommandLineOptionsInstrumenterRedis
  * @see Writer
  * @see RedisManager
  * @see AndroZooUtils
@@ -41,15 +41,26 @@ import java.util.Date;
  */
 public class InstrumenterRedis {
     public static void main(String[] args) {
-        CommandLineOptionsInstrumenterRedis.v().parseArgs(args);
+        CommandLineOptions options = CommandLineOptions.v();
+        options.setAppName("AndroLibZoo FlowDroid Experiment");
+        options.addOption(new CommandLineOption("apikey", "a", "AndroZoo API key", true, true));
+        options.addOption(new CommandLineOption("platforms", "p", "Platform file", true, true));
+        options.addOption(new CommandLineOption("redis-srv", "s", "Sets the redis server address", true, true));
+        options.addOption(new CommandLineOption("redis-port", "n", "Sets the redis port to connect to", true, true));
+        options.addOption(new CommandLineOption("redis-pwd", "w", "Sets the redis password", true, true));
+        options.addOption(new CommandLineOption("redis-root", "o", "Sets the redis root list/set", true, true));
+        options.addOption(new CommandLineOption("output", "t", "Output folder", true, true));
+        options.parseArgs(args);
+
         Writer.v().pinfo(String.format("Instrumentation started on %s\n", new Date()));
-        String output = CommandLineOptionsInstrumenterRedis.v().getOutput();
-        String apikey = CommandLineOptionsInstrumenterRedis.v().getAndroZooApiKey();
-        String platformsPath = CommandLineOptionsInstrumenterRedis.v().getPlatforms();
-        String redisSrv = CommandLineOptionsInstrumenterRedis.v().getRedisServer();
-        String redisPwd = CommandLineOptionsInstrumenterRedis.v().getRedisPwd();
-        String redisPort = CommandLineOptionsInstrumenterRedis.v().getRedisPort();
-        String redisRoot = CommandLineOptionsInstrumenterRedis.v().getRedisRoot();
+
+        String output = CommandLineOptions.v().getOptionValue("output");
+        String apikey = CommandLineOptions.v().getOptionValue("apikey");
+        String platformsPath = CommandLineOptions.v().getOptionValue("platforms");
+        String redisSrv = CommandLineOptions.v().getOptionValue("redis-src");
+        String redisPwd = CommandLineOptions.v().getOptionValue("redis-rootpwd");
+        String redisPort = CommandLineOptions.v().getOptionValue("redis-port");
+        String redisRoot = CommandLineOptions.v().getOptionValue("redis-root");
 
         String redisSpop = String.format("%s:pop", redisRoot);
         RedisManager rm = new RedisManager(redisSrv, redisPort, redisPwd);
@@ -66,15 +77,14 @@ public class InstrumenterRedis {
                 Writer.v().psuccess(String.format("SHA well received: %s", pop));
                 String apkPath = au.getApk(pop);
                 String appName = FilenameUtils.getBaseName(apkPath);
-                ResultsAccumulator.v().setAppName(appName);
 
                 Writer.v().pinfo("Loading Soot...");
                 SootUtils su = new SootUtils();
                 su.setupSootWithOutput(platformsPath, apkPath, output, false);
                 Writer.v().psuccess("Soot loaded.");
 
-                PackManager.v().getPack("jtp").add(com.jordansamhi.androspecter.instrumentation.Instrumenter.v().addLogToAllMethodCalls("MY_LOGGER", "jtp.callsLogger"));
-                PackManager.v().getPack("jtp").add(com.jordansamhi.androspecter.instrumentation.Instrumenter.v().addLogToAllMethods("MY_LOGGER", "jtp.methodsLogger"));
+                PackManager.v().getPack("jtp").add(Instrumenter.v().addLogToAllMethodCalls("MY_LOGGER", "jtp.callsLogger"));
+                PackManager.v().getPack("jtp").add(Instrumenter.v().addLogToAllMethods("MY_LOGGER", "jtp.methodsLogger"));
 
                 Writer.v().pinfo("Instrumentation in progress..");
                 PackManager.v().runPacks();
