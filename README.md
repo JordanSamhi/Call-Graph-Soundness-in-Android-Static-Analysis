@@ -7,9 +7,9 @@ This repository hosts the dataset and the artifacts used in our study.
 
 ## Link to the Zenodo archive
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.8207803.svg)](https://doi.org/10.5281/zenodo.8207803)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10400505.svg)](https://doi.org/10.5281/zenodo.10400505)
 
-:link: https://zenodo.org/record/8207803
+:link: https://doi.org/10.5281/zenodo.10400505
 
 ## Artifact Folder Structure
 
